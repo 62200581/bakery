@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Dashboard - Bakery Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crm_style.css') }}">
+</head>
+<body>
+    <!-- Unified Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-bread-slice me-2"></i>
+                Bakery Management System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-chart-line me-1"></i>
+                            Sales Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/crm">
+                            <i class="fas fa-users me-1"></i>
+                            CRM Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/inventory">
+                            <i class="fas fa-boxes me-1"></i>
+                            Inventory Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/calendar">
+                            <i class="fas fa-calendar-alt me-1"></i>
+                            Calendar & Scheduling
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center text-light">
+                    <span class="me-2">Today:</span>
+                    <span id="today-date" class="fw-bold">2023-01-01</span>
+                    <button id="refresh-btn" class="btn btn-sm btn-outline-light ms-3">
+                        <i class="fas fa-sync-alt me-1"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2><i class="fas fa-users me-2"></i>Customer Relationship Management</h2>
+                <p class="text-muted">Manage customer relationships and analyze feedback</p>
+            </div>
+        </div>
+
+        <!-- Context Cards Row -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div id="repeat-customers" class="metric-value">0</div>
+                        <div class="metric-label">Repeat Customers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div id="avg-rating" class="metric-value">0.0</div>
+                        <div class="metric-label">Average Rating</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div id="pending-orders" class="metric-value">0</div>
+                        <div class="metric-label">Pending Orders</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <div id="top-product" class="metric-value">-</div>
+                        <div class="metric-label">Top Selling Product</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Charts Row -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-star me-2"></i>Customer Ratings Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="ratings-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-heart me-2"></i>Feedback Sentiment</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="sentiment-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Insights Row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-bar me-2"></i>Customer Insights</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="insight-item">
+                                    <h6>Customer Retention</h6>
+                                    <p class="text-muted">Track how many customers return for repeat purchases</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 87.5%">87.5%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="insight-item">
+                                    <h6>Customer Satisfaction</h6>
+                                    <p class="text-muted">Average rating from customer feedback</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 84%">4.2/5.0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="insight-item">
+                                    <h6>Order Completion</h6>
+                                    <p class="text-muted">Percentage of orders successfully completed</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 95%">95%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/crm_dashboard.js') }}?v=3"></script>
+</body>
+</html> 
